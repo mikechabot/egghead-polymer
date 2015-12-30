@@ -1,0 +1,46 @@
+<link rel="import" href="child-element.html" />
+<dom-module id ="parent-element">
+	<template>
+		<p>Parent</p>
+		<input type="text" value="{{parentData::input}}">
+		<child-element name="Child 1" data="{{parentData}}"></child-element> <!-- TWO WAY {{ }}-->
+		<child-element name="Child 2" data="[[parentData]]"></child-element> <!-- ONE WAY {{ }}-->
+		<!-- so even though the child is allowed two-way 
+			 bind, by way of 'notify', the parent element can control
+			 whether or not thats possible as well
+		-->
+	</template>
+	<script>
+		Polymer({
+			is: 'parent-element'
+		})
+	</script>
+</dom-module>
+
+<dom-module id ="child-element">
+	<template>
+		<p>[[name]]</p>
+		<input type="text" value="{{data::input}}">
+		<p>Output for [[name]]</p>
+		<p><code>{{data}}</code></p>
+	</template>
+	<script>
+		Polymer({
+			is: 'child-element',
+			ready: function() {
+				this.addEventListener('data-changed', function(e) {
+					console.log(e.detail.value)
+				});
+			},
+			properties: {
+				data: {
+					type: String,
+					notify: true		// Notify host element of change, two-way binding!
+				},
+				name: {
+					type: String
+				}
+			}
+		})
+	</script>
+</dom-module>

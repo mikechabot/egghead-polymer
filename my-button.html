@@ -1,0 +1,22 @@
+<dom-module id ="my-button">
+	<template>
+		<!-- Get nested elements, can use 'this' as context, equal to this.props.children in React -->
+		<content>
+
+		</content>
+	</template>
+	<script>
+		// This references the button passed into our content
+		Polymer({
+			is: 'my-button',
+			extends: 'button',
+			created: function() {
+				this.style.color = 'red';
+				this.addEventListener('click', this.clickHandler)
+			},
+			clickHandler: function() {
+				this.textContent = this.textContent.split('').reverse().join('');
+			}
+		})
+	</script>
+</dom-module>

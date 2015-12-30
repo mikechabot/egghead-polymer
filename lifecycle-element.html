@@ -1,0 +1,46 @@
+<dom-module id ="lifecycle-element">
+	<template>
+		<button id="btn">click to remove me from the DOM, and detach the listener</button>
+	</template>
+	<script>
+		Polymer({
+			is: 'lifecycle-element',
+			created: function() {
+				// created() = document.registerElement(), just access to element, nothing else
+				// THIS = our polymer element
+				this.log('created');
+				this.addEventListener('click', function() {
+					this.remove();
+				})
+			},
+			ready: function() {
+				// ready() has access to local DOM, aka the button in our TEMPLATE
+				// ready() isnt that much different from attached
+				// ready() of any nested polymer elements would have fired before this
+				this.log('ready');
+				this.ticker = setInterval(this.tick.bind(this), 2500);
+			},
+			attached: function() {
+				this.log('attached');
+			},
+			detached: function() {
+				clearInterval(this.ticker);			
+			},
+			attributeChanged: function(name, oldValue, newValue) {
+				this.log('attributeChanged');
+				console.log('%s was changed to %s from %s', name, newValue, oldValue);
+			},
+			tick: function() {
+				this.setAttribute('data-id', Math.random());
+			},
+			updateAttribute: function(cycle) {
+				this.setAttribute('class', cycle);
+			},
+			log: function(cycle) {
+				console.log('**', cycle);
+				this.$ && console.dir(this.$.btn);
+				this.updateAttribute(cycle);
+			}
+		})
+	</script>
+</dom-module>
